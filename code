@@ -1,0 +1,77 @@
+<style>
+.hover-1, .hover-2, .hover-3, .hover-4, .hover-5, .hover-6 {
+    position: absolute;
+    transition: transform 0.3s ease;
+}
+
+.hover-right {
+    transform: translateX(56px);
+    transition: transform 0.3s ease; /* Плавная анимация сдвига */
+}
+
+.hover-right-more {
+    transform: translateX(112px); /* Удвоенное значение сдвига */
+    transition: transform 0.3s ease; /* Плавная анимация сдвига */
+}
+</style>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const hoverClasses = ['hover-1', 'hover-2', 'hover-3', 'hover-4', 'hover-5', 'hover-6'];
+    
+    hoverClasses.forEach((hoverClass, index) => {
+        const element = document.querySelector(`.${hoverClass}`);
+        
+        element.addEventListener('mouseenter', () => {
+            // Сдвигаем элементы, находящиеся ниже текущего элемента
+            for (let i = index + 1; i < hoverClasses.length; i++) {
+                const rightElement = document.querySelector(`.${hoverClasses[i]}`);
+                if (rightElement.classList.contains('hover-right')) {
+                    rightElement.classList.add('hover-right-more');
+                } else {
+                    rightElement.classList.add('hover-right');
+                }
+            }
+
+            // Одновременно поднимаем текущий элемент после небольшой задержки
+            setTimeout(() => {
+                element.style.zIndex = '10';
+                // Возвращаем элементы на место сразу после подъема текущего элемента
+                setTimeout(() => {
+                    for (let i = index + 1; i < hoverClasses.length; i++) {
+                        const rightElement = document.querySelector(`.${hoverClasses[i]}`);
+                        rightElement.classList.remove('hover-right', 'hover-right-more');
+                    }
+                }, 200);
+            }, 200);
+        });
+        
+        element.addEventListener('mouseleave', () => {
+            // Сдвигаем элементы, находящиеся ниже текущего элемента
+            for (let i = index + 1; i < hoverClasses.length; i++) {
+                const rightElement = document.querySelector(`.${hoverClasses[i]}`);
+                if (rightElement.classList.contains('hover-right-more')) {
+                    rightElement.classList.add('hover-right');
+                    rightElement.classList.remove('hover-right-more');
+                } else {
+                    rightElement.classList.add('hover-right');
+                }
+            }
+
+            // Одновременно опускаем текущий элемент после небольшой задержки
+            setTimeout(() => {
+                element.style.zIndex = '';
+                // Возвращаем элементы на место сразу после опускания текущего элемента
+                setTimeout(() => {
+                    for (let i = index + 1; i < hoverClasses.length; i++) {
+                        const rightElement = document.querySelector(`.${hoverClasses[i]}`);
+                        rightElement.classList.remove('hover-right', 'hover-right-more');
+                    }
+                }, 200);
+            }, 200);
+        });
+    });
+});
+
+</script>
